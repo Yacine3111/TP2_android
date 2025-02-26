@@ -1,38 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/adress_bar"
+        <SearchView
+            android:id="@+id/search_bar"
             android:layout_width="358dp"
             android:layout_height="wrap_content"
-            android:autofillHints=""
             android:hint="@string/research_hint"
-            android:inputType="textWebEditText" />
+            android:searchIcon="@null"
+            android:searchHintIcon="@null"
+            android:iconifiedByDefault="false"
+            />
 
         <ImageButton
             android:id="@+id/navigate_btn"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
+            style="@style/ImageButton_style"
             android:background="@drawable/ic_navigate_btn"
-            android:contentDescription="@string/contentDescription_navigate_btn" />
+            android:contentDescription="@string/content_description_navigate_btn"
+            />
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <WebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
 
-    </Button>
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <ImageButton
+            android:id="@+id/previous_btn"
+            style="@style/ImageButton_style"
+            android:background="@drawable/ic_previous_btn"
+            android:contentDescription="@string/content_description_previous_btn" />
+        <ImageButton
+            android:id="@+id/next_btn"
+            style="@style/ImageButton_style"
+            android:background="@drawable/ic_next_btn"
+            android:contentDescription="@string/content_description_next_btn" />
+
+        <ImageButton
+            android:id="@+id/home_btn"
+            style="@style/ImageButton_style"
+            android:background="@drawable/ic_home_btn"
+            android:contentDescription="@string/content_description_home_btn" />
+
+        <ImageButton
+            android:id="@+id/new_home_btn"
+            style="@style/ImageButton_style"
+            android:background="@drawable/ic_new_home_btn"
+            android:contentDescription="@string/content_description_new_home_btn" />
+    </LinearLayout>
+
 
 
 
