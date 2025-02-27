@@ -6,4 +6,6 @@
     <string name="content_description_next_btn">icon next button</string>
     <string name="content_description_home_btn">icon home button</string>
     <string name="content_description_new_home_btn">icon new home button</string>
+    <string name="message_no_app_found">aucune application pour le shéma</string>
+    <string name="message_new_home_page">nouvelle page d\'acceuil</string>
 </resources>
