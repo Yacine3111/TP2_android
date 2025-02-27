@@ -1,14 +1,17 @@
 package com.example.tp2_android;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -22,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
     SearchView searchBar;
     ImageButton navigateBtn,nextBtn,previousBtn,homeBtn,newHomeBtn;
     WebView webView;
+    ProgressBar progressBar;
     String homePath;
+    InputMethodManager inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         nextBtn=findViewById(R.id.next_btn);
         newHomeBtn=findViewById(R.id.new_home_btn);
         webView=findViewById(R.id.web_view);
+        progressBar=findViewById(R.id.progress_bar);
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 
         webView.getSettings().setJavaScriptEnabled(true);
@@ -50,10 +57,56 @@ public class MainActivity extends AppCompatActivity {
         homePath="https://www.google.com";
         webView.loadUrl(homePath);
 
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request){
+                Uri uri=request.getUrl();
+                return checkUrl(uri);
+            }
+            @Override
+            public void onPageFinished(WebView view,String url){
+                searchBar.setQuery(url,false);
+            }
+        });
+
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view,int newProgress){
+                progressBar.setProgress(newProgress);
+                if(newProgress==100){
+                    progressBar.setVisibility(ProgressBar.GONE);
+                    webView.setVisibility(WebView.VISIBLE);
+                }else{
+                    progressBar.setVisibility(ProgressBar.VISIBLE);
+                    webView.setVisibility(WebView.GONE);
+                }
+            }
+        });
+
+        searchBar.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if(!hasFocus){
+                hideKeyboard();
+            }
+        });
+
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Uri uri=Uri.parse(query);
+                checkUrl(uri);
+                hideKeyboard();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         navigateBtn.setOnClickListener(v->{
             Uri uri= Uri.parse(searchBar.getQuery().toString());
-            checkUrl(webView,uri);
+            checkUrl(uri);
         });
 
         homeBtn.setOnClickListener(v->{
@@ -65,31 +118,20 @@ public class MainActivity extends AppCompatActivity {
             alertMessage(getString(R.string.message_new_home_page));
         });
 
-
-        webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request){
-                Uri uri=request.getUrl();
-                return checkUrl(view,uri);
-            }
-            @Override
-            public void onPageFinished(WebView view,String url){
-                searchBar.setQuery(url,false);
-            }
-        });
-
-
     }
-
-    public boolean checkUrl(WebView view,Uri uri){
+    public boolean checkUrl(Uri uri){
         String scheme=uri.getScheme();
         String pagePath = uri.toString();
-        if(scheme==null) {
+        if(uri.toString().isEmpty()){
+            alertMessage(getString(R.string.empty_search_bar));
+            return false;
+        }
+        else if(scheme==null) {
             pagePath="https://" + uri;
-            view.loadUrl(pagePath);
+            webView.loadUrl(pagePath);
             return false;
         } else if (scheme.equals("http")||scheme.equals("https")) {
-            view.loadUrl(pagePath);
+            webView.loadUrl(pagePath);
             return false;
         }else{
             Intent intent=new Intent(Intent.ACTION_VIEW,uri);
@@ -103,5 +145,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public void alertMessage(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void hideKeyboard(){
+        inputMethodManager.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
     }
 }
