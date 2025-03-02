@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">TP2_android</string>
     <string name="research_hint">Rechercher</string>
-    <string name="content_description_navigate_btn">icon navigate button</string>
-    <string name="content_description_previous_btn">icon previous button</string>
-    <string name="content_description_next_btn">icon next button</string>
-    <string name="content_description_home_btn">icon home button</string>
-    <string name="content_description_new_home_btn">icon new home button</string>
+    <string name="content_description_navigate_btn">icon navigate </string>
+    <string name="content_description_previous_btn">icon previous </string>
+    <string name="content_description_next_btn">icon next </string>
+    <string name="content_description_home_btn">icon home </string>
+    <string name="content_description_new_home_btn">icon new home </string>
     <string name="message_no_app_found">aucune application pour le shéma</string>
     <string name="message_new_home_page">nouvelle page d\'acceuil</string>
     <string name="empty_search_bar">Il n\'y a pas d\'adresse</string>

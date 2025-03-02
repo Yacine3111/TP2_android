@@ -51,12 +51,6 @@ public class MainActivity extends AppCompatActivity {
         progressBar=findViewById(R.id.progress_bar);
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-
-        webView.getSettings().setJavaScriptEnabled(true);
-
-        homePath="https://www.google.com";
-        webView.loadUrl(homePath);
-
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request){
@@ -66,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view,String url){
                 searchBar.setQuery(url,false);
+                checkHomePath();
+                checkBackOrNext();
             }
         });
 
@@ -104,19 +100,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        webView.getSettings().setJavaScriptEnabled(true);
+
+        homePath="https://www.google.com/";
+        webView.loadUrl(homePath);
+
         navigateBtn.setOnClickListener(v->{
             Uri uri= Uri.parse(searchBar.getQuery().toString());
             checkUrl(uri);
         });
 
-        homeBtn.setOnClickListener(v->{
-            webView.loadUrl(homePath);
-        });
+        homeBtn.setOnClickListener(v-> webView.loadUrl(homePath));
+
 
         newHomeBtn.setOnClickListener(v->{
             homePath=searchBar.getQuery().toString();
             alertMessage(getString(R.string.message_new_home_page));
+            checkHomePath();
         });
+
+        previousBtn.setOnClickListener(v-> webView.goBack());
+
+        nextBtn.setOnClickListener(v-> webView.goForward());
 
     }
     public boolean checkUrl(Uri uri){
@@ -149,5 +154,39 @@ public class MainActivity extends AppCompatActivity {
 
     public void hideKeyboard(){
         inputMethodManager.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
+    }
+
+    public void checkHomePath(){
+        if(searchBar.getQuery().toString().equals(homePath)){
+            homeBtn.setEnabled(false);
+            newHomeBtn.setEnabled(false);
+
+            homeBtn.setBackgroundResource(R.drawable.ic_home_disabled_btn);
+            newHomeBtn.setBackgroundResource(R.drawable.ic_new_home_disabled_btn);
+        }else{
+            homeBtn.setEnabled(true);
+            newHomeBtn.setEnabled(true);
+
+            homeBtn.setBackgroundResource(R.drawable.ic_home_btn);
+            newHomeBtn.setBackgroundResource(R.drawable.ic_new_home_btn);
+        }
+    }
+
+    public void checkBackOrNext(){
+        if(webView.canGoBack()){
+            previousBtn.setBackgroundResource(R.drawable.ic_previous_btn);
+            previousBtn.setEnabled(true);
+        }else{
+            previousBtn.setBackgroundResource(R.drawable.ic_previous_disabled_btn);
+            previousBtn.setEnabled(false);
+        }
+
+        if(webView.canGoForward()){
+            nextBtn.setBackgroundResource(R.drawable.ic_next_btn);
+            nextBtn.setEnabled(true);
+        }else{
+            nextBtn.setBackgroundResource(R.drawable.ic_next_disabled_btn);
+            nextBtn.setEnabled(false);
+        }
     }
 }

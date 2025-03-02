@@ -59,6 +59,7 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:gravity="center">
+
         <ImageButton
             android:id="@+id/previous_btn"
             style="@style/ImageButton_style"
