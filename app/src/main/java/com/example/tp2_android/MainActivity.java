@@ -79,12 +79,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //permet de vérifier si on a le focus sur la barre de recherche et cache le clavier si le
+        //focus change
         searchBar.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if(!hasFocus){
                 hideKeyboard();
             }
         });
 
+        //utilisé pour pouvoir utilisé le bouton entrer et le bouton recherche du clavier de l'émulateur
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -124,6 +127,9 @@ public class MainActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(v-> webView.goForward());
 
     }
+
+    //on vérifie si l'url est valide pour la recherche soit ajout le bon shcéma soit on
+    // redirige si c'est possiblev ers la bonne activié
     public boolean checkUrl(Uri uri){
         String scheme=uri.getScheme();
         String pagePath = uri.toString();
@@ -156,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
     }
 
+    //on Vérifie si on est dans le home path pour désactivé les boutons home et newHome
     public void checkHomePath(){
         if(searchBar.getQuery().toString().equals(homePath)){
             homeBtn.setEnabled(false);
@@ -172,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //on vérifie si on peut aller en arrière ou en avant pour soit
+    // activer ou désactiver les bouton previous et next
     public void checkBackOrNext(){
         if(webView.canGoBack()){
             previousBtn.setBackgroundResource(R.drawable.ic_previous_btn);
